@@ -48,11 +48,11 @@ rm ${IGNITION}.tmp
 # Now create the Vm with the proper name using the available id
 ########
 
-qm create ${NewVMID} --name ${NAME} --cores 2 --memory 2048 --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-pci
+qm create ${NewVMID} --name ${NAME} --cores 2 --memory 2048 --net0 virtio,bridge=vmbr0,firewall=0 --scsihw virtio-scsi-pci
 qm set ${NewVMID} --scsi0 OneTB:0,import-from=${IMAGE}
 qm set ${NewVMID} --boot order=scsi0
 qm set ${NewVMID} --serial0 socket --vga qxl
-qm set ${NewVMID} --agent enabled=1
+qm set ${NewVMID} --agent enabled=1,fstrim_cloned_disks=1
 qm set ${NewVMID} --args '-fw_cfg name=opt/org.flatcar-linux/config,file='${IGNITION} # make sure the " bootstrap ignition file" is used
 echo "---------------------------------------"
 echo VM: ${NAME} id:${NewVMID} has been created
